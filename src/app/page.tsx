@@ -11,6 +11,8 @@ import { useTheme } from 'next-themes';
 import { Bricolage_Grotesque } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import {  Wand2, FileText, Rocket } from 'lucide-react';
+
 
 const brico = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -107,7 +109,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
           className={cn(
-            'from-foreground via-foreground/80 to-foreground/40 mb-4 cursor-crosshair bg-gradient-to-b bg-clip-text text-4xl font-bold text-transparent sm:text-7xl',
+    'from-foreground via-foreground/80 to-foreground/40 mb-4 cursor-crosshair bg-gradient-to-b bg-clip-text text-3xl font-bold text-transparent sm:text-6xl',
             brico.className,
           )}
         >
@@ -130,40 +132,39 @@ const handleSubmit = async (e: React.FormEvent) => {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="mb-12 grid grid-cols-2 gap-6 sm:grid-cols-3"
-        >
-          <div
-            className={cn(
-              'border-primary/10 flex flex-col items-center justify-center rounded-xl border bg-white/5 p-4 backdrop-blur-md',
-            )}
-          >
-            <Code className="text-primary mb-2 h-5 w-5" />
-            <span className="text-xl font-bold">100+</span>
-            <span className="text-muted-foreground text-xs">Components</span>
-          </div>
-          <div
-            className={cn(
-              'border-primary/10 flex flex-col items-center justify-center rounded-xl border bg-white/5 p-4 backdrop-blur-md',
-            )}
-          >
-            <ExternalLink className="text-primary mb-2 h-5 w-5" />
-            <span className="text-xl font-bold">Open Source</span>
-            <span className="text-muted-foreground text-xs">BSD 3-Clause</span>
-          </div>
-          <div
-            className={cn(
-              'border-primary/10 flex flex-col items-center justify-center rounded-xl border bg-white/5 p-4 backdrop-blur-md',
-            )}
-          >
-            <Star className="text-primary mb-2 h-5 w-5" />
-            <span className="text-xl font-bold">Premium</span>
-            <span className="text-muted-foreground text-xs">Quality</span>
-          </div>
-        </motion.div>
-
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.7 }}
+  className="mb-12 grid grid-cols-2 gap-6 sm:grid-cols-3"
+>
+  <div
+    className={cn(
+      'border-primary/10 flex flex-col items-center justify-center rounded-xl border bg-white/5 p-4 backdrop-blur-md',
+    )}
+  >
+    <FileText className="text-primary mb-2 h-5 w-5" />
+    <span className="text-xl font-bold">25+</span>
+    <span className="text-muted-foreground text-xs">Pro Templates</span>
+  </div>
+  <div
+    className={cn(
+      'border-primary/10 flex flex-col items-center justify-center rounded-xl border bg-white/5 p-4 backdrop-blur-md',
+    )}
+  >
+    <Wand2 className="text-primary mb-2 h-5 w-5" />
+    <span className="text-xl font-bold">AI-Powered</span>
+    <span className="text-muted-foreground text-xs">Suggestions</span>
+  </div>
+  <div
+    className={cn(
+      'border-primary/10 flex flex-col items-center justify-center rounded-xl border bg-white/5 p-4 backdrop-blur-md',
+    )}
+  >
+    <Rocket className="text-primary mb-2 h-5 w-5" />
+    <span className="text-xl font-bold">Interview-Ready</span>
+    <span className="text-muted-foreground text-xs">In Minutes</span>
+  </div>
+</motion.div>
         <motion.form
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
