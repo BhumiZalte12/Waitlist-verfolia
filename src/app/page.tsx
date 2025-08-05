@@ -1,103 +1,278 @@
-import Image from "next/image";
+// File: app/page.tsx
+'use client';
 
-export default function Home() {
+import type React from 'react';
+import { useState, useEffect } from 'react';
+import { ArrowRight, Sparkles, Code, Star, ExternalLink } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Particles } from '@/components/ui/particles';
+import { Spotlight } from '@/components/ui/spotlight';
+import { useTheme } from 'next-themes';
+import { Bricolage_Grotesque } from 'next/font/google';
+import { cn } from '@/lib/utils';
+
+const brico = Bricolage_Grotesque({
+  subsets: ['latin'],
+});
+
+// Sample users for the waitlist display
+const users = [
+  { imgUrl: 'https://avatars.githubusercontent.com/u/111780029' },
+  { imgUrl: 'https://avatars.githubusercontent.com/u/123104247' },
+  { imgUrl: 'https://avatars.githubusercontent.com/u/115650165' },
+  { imgUrl: 'https://avatars.githubusercontent.com/u/71373838' },
+];
+
+export default function Page() {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { resolvedTheme } = useTheme();
+  const [color, setColor] = useState('#ffffff');
+
+  useEffect(() => {
+    setColor(resolvedTheme === 'dark' ? '#ffffff' : '#e60a64');
+  }, [resolvedTheme]);
+
+  // In app/page.tsx
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+  setError(null);
+
+  try {
+    // --- THIS IS THE CORRECTED FETCH CALL ---
+    const response = await fetch('https://formspree.io/f/myzpjadj', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json' // Good practice for Formspree
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    // This handles errors correctly, preventing the JSON error
+    if (!response.ok) {
+      const errorText = await response.text();
+      // Try to parse it as JSON, but fall back to text if it fails
+      try {
+        const errorData = JSON.parse(errorText);
+        throw new Error(errorData.error || 'An error occurred.');
+      } catch (parseError) {
+        throw new Error(errorText || 'An error occurred.');
+      }
+    }
+
+    setSubmitted(true);
+
+  } catch (err: any) {
+    setError(err.message);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden xl:h-screen">
+      <Spotlight />
+      <Particles
+        className="absolute inset-0 z-0"
+        quantity={100}
+        color={color}
+      />
+      <div className="relative z-10 mx-auto max-w-2xl px-4 py-16 text-center">
+        {/* Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="border-primary/10 from-primary/15 to-primary/5 mb-8 inline-flex items-center gap-2 rounded-full border bg-gradient-to-r px-4 py-2 backdrop-blur-sm"
+        >
+          <div className="w-6 h-6 bg-white rounded-md flex items-center justify-center">
+            <span className="text-black font-bold text-xs">V</span>
+          </div>
+          <span className="text-sm font-medium">Verfolia</span>
+          <motion.div
+            animate={{ x: [0, 5, 0] }}
+            transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
+          >
+            <ArrowRight className="h-4 w-4" />
+          </motion.div>
+        </motion.div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className={cn(
+            'from-foreground via-foreground/80 to-foreground/40 mb-4 cursor-crosshair bg-gradient-to-b bg-clip-text text-4xl font-bold text-transparent sm:text-7xl',
+            brico.className,
+          )}
+        >
+          Join the{' '}
+          <span className="bg-primary from-foreground to-primary via-rose-300 bg-clip-text text-transparent dark:bg-gradient-to-b">
+            Waitlist
+          </span>
+        </motion.h1>
+
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="text-muted-foreground mt-2 mb-12 sm:text-lg"
+        >
+          Be the first to access our revolutionary component library.
+          <br className="hidden sm:block" /> Build your MVP faster than ever
+          before.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+          className="mb-12 grid grid-cols-2 gap-6 sm:grid-cols-3"
+        >
+          <div
+            className={cn(
+              'border-primary/10 flex flex-col items-center justify-center rounded-xl border bg-white/5 p-4 backdrop-blur-md',
+            )}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <Code className="text-primary mb-2 h-5 w-5" />
+            <span className="text-xl font-bold">100+</span>
+            <span className="text-muted-foreground text-xs">Components</span>
+          </div>
+          <div
+            className={cn(
+              'border-primary/10 flex flex-col items-center justify-center rounded-xl border bg-white/5 p-4 backdrop-blur-md',
+            )}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+            <ExternalLink className="text-primary mb-2 h-5 w-5" />
+            <span className="text-xl font-bold">Open Source</span>
+            <span className="text-muted-foreground text-xs">BSD 3-Clause</span>
+          </div>
+          <div
+            className={cn(
+              'border-primary/10 flex flex-col items-center justify-center rounded-xl border bg-white/5 p-4 backdrop-blur-md',
+            )}
+          >
+            <Star className="text-primary mb-2 h-5 w-5" />
+            <span className="text-xl font-bold">Premium</span>
+            <span className="text-muted-foreground text-xs">Quality</span>
+          </div>
+        </motion.div>
+
+        <motion.form
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          onSubmit={handleSubmit}
+          className="mx-auto flex flex-col gap-4 sm:flex-row"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <AnimatePresence mode="wait">
+            {!submitted ? (
+              <>
+                <div className="relative flex-1">
+                  <motion.input
+                    key="email-input"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setEmail(e.target.value)
+                    }
+                    required
+                    className="border-primary/20 text-foreground placeholder:text-muted-foreground/70 focus:border-primary/50 focus:ring-primary/30 w-full rounded-xl border bg-white/5 px-6 py-4 backdrop-blur-md transition-all focus:ring-2 focus:outline-none"
+                  />
+                  {error && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="border-destructive/40 bg-destructive/10 text-destructive mt-2 rounded-xl border px-4 py-1 text-sm sm:absolute"
+                    >
+                      {error}
+                    </motion.p>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting || submitted}
+                  className="group text-primary-foreground focus:ring-primary/50 relative overflow-hidden rounded-xl bg-gradient-to-b from-rose-500 to-rose-700 px-8 py-4 font-semibold text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition-all duration-300 hover:shadow-[0_0_20px_rgba(236,72,153,0.4)] focus:ring-2 focus:outline-none active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    {isSubmitting ? 'Joining...' : 'Join Waitlist'}
+                    <Sparkles className="h-4 w-4 transition-all duration-300 group-hover:rotate-12" />
+                  </span>
+                  <span className="to-primary absolute inset-0 z-0 bg-gradient-to-r from-rose-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+                </button>
+              </>
+            ) : (
+              <motion.div
+                key="thank-you-message"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.6 }}
+                className={cn(
+                  'border-primary/20 from-primary/10 to-primary/10 text-primary flex-1 cursor-pointer rounded-xl border bg-gradient-to-r via-transparent px-6 py-4 font-medium backdrop-blur-md transition-all duration-300 hover:shadow-[0_0_20px_rgba(236,72,153,0.3)] active:brightness-125',
+                )}
+              >
+                <span className="flex items-center justify-center gap-2">
+                  Thanks for joining!{' '}
+                  <Sparkles className="h-4 w-4 animate-pulse" />
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.form>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1 }}
+          className="mt-10 flex items-center justify-center gap-1"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <div className="flex -space-x-3">
+            {users.map((user, i) => (
+              <motion.div
+                key={i}
+                initial={{ scale: 0, x: -10 }}
+                animate={{ scale: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 1 + i * 0.2 }}
+                className="border-background from-primary size-10 rounded-full border-2 bg-gradient-to-r to-rose-500 p-[2px]"
+              >
+                <div className="overflow-hidden rounded-full">
+                  <img
+                    src={user.imgUrl}
+                    alt="Avatar"
+                    className="rounded-full transition-all duration-300 hover:scale-110 hover:rotate-6"
+                    width={40}
+                    height={40}
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <motion.span
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 1.3 }}
+            className="text-muted-foreground ml-2"
+          >
+            <span className="text-primary font-semibold">100+</span> already
+            joined ✨
+          </motion.span>
+        </motion.div>
+      </div>
+    </main>
   );
 }
