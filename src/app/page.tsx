@@ -10,6 +10,7 @@ import { Spotlight } from '@/components/ui/spotlight';
 import { useTheme } from 'next-themes';
 import { Bricolage_Grotesque } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 const brico = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -37,42 +38,40 @@ export default function Page() {
 
   // In app/page.tsx
 
+// In app/page.tsx
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   setIsSubmitting(true);
   setError(null);
 
   try {
-    // --- THIS IS THE CORRECTED FETCH CALL ---
     const response = await fetch('https://formspree.io/f/myzpjadj', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json' // Good practice for Formspree
+        'Accept': 'application/json'
       },
       body: JSON.stringify({ email }),
     });
 
-    // This handles errors correctly, preventing the JSON error
     if (!response.ok) {
-      const errorText = await response.text();
-      // Try to parse it as JSON, but fall back to text if it fails
-      try {
-        const errorData = JSON.parse(errorText);
-        throw new Error(errorData.error || 'An error occurred.');
-      } catch (parseError) {
-        throw new Error(errorText || 'An error occurred.');
-      }
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Form submission failed');
     }
 
     setSubmitted(true);
 
-  } catch (err: any) {
-    setError(err.message);
+  } catch (err: unknown) { // Use 'unknown' instead of 'any'
+    // Check if the error is an actual Error object before using its message
+    if (err instanceof Error) {
+      setError(err.message);
+    } else {
+      setError('An unexpected error occurred.');
+    }
   } finally {
     setIsSubmitting(false);
   }
-};
+}
 
 
   return (

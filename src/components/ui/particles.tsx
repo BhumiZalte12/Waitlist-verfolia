@@ -23,7 +23,7 @@ export function Particles({
 
     let w = (canvas.width = window.innerWidth);
     let h = (canvas.height = window.innerHeight);
-    let particles: { x: number; y: number; vx: number; vy: number }[] = [];
+    const particles: { x: number; y: number; vx: number; vy: number }[] = [];
 
     const properties = {
       particleColor: color,
