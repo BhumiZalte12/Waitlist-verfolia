@@ -91,14 +91,13 @@ export default function Page() {
   };
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden bg-background">
+    <main className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-indigo-950 via-background to-slate-900 animated-gradient">
       <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" />
-      
-      {/* FIX: Changed -z-10 to z-0 to make particles visible */}
       <Particles className="absolute inset-0 z-0" quantity={100} color={color} />
 
       {/* Main Content Grid */}
-      <div className="relative z-10 mx-auto grid min-h-screen max-w-7xl grid-cols-1 items-center gap-8 px-6 py-20 lg:grid-cols-2 lg:gap-16">
+      {/* FIX: Added top padding (pt-28) for mobile and removed vertical centering */}
+      <div className="relative z-10 mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-8 px-4 pt-28 pb-16 sm:px-6 lg:items-center lg:grid-cols-2 lg:gap-16 lg:py-20">
         
         {/* Left Column: Hero Content & Form */}
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
@@ -122,7 +121,7 @@ export default function Page() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
             className={cn(
-              'mb-4 bg-gradient-to-b from-foreground via-foreground/80 to-foreground/60 bg-clip-text text-4xl font-bold text-transparent sm:text-6xl',
+              'mb-4 bg-gradient-to-b from-foreground via-foreground/80 to-foreground/60 bg-clip-text text-4xl font-bold text-transparent sm:text-5xl lg:text-6xl',
               brico.className,
             )}
           >
@@ -231,15 +230,15 @@ export default function Page() {
             }}
         >
           {features.map((feature, i) => (
-           <motion.div
-  key={i}
-  className="animate-float flex items-start gap-4 rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg"
-  style={{ animationDelay: `${i * 0.2}s` }}
-  variants={{
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  }}
->
+            <motion.div
+              key={i}
+              className="animate-float flex items-start gap-4 rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg"
+              style={{ animationDelay: `${i * 0.2}s` }}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+            >
               <div className="flex-shrink-0">{feature.icon}</div>
               <div>
                 <h3 className="text-lg font-bold text-foreground">{feature.title}</h3>
