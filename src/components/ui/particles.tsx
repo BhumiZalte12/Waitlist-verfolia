@@ -27,7 +27,7 @@ export function Particles({
 
     const properties = {
       particleColor: color,
-      particleRadius: 0.5,
+      particleRadius: 0.8,
       particleCount: quantity,
       particleMaxVelocity: 0.1,
     };

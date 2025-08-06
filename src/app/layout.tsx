@@ -3,13 +3,13 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ui/theme-provider';
-import Navbar from '@/components/navbar';
+import Navbar from '@/components/navbar'; // Import the Navbar
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Join The Waitlist!',
-  description: 'Get early access to our new platform.',
+  title: 'Verfolia - Join the Waitlist',
+  description: 'The best way to build your resume.',
 };
 
 export default function RootLayout({
@@ -22,11 +22,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark" // Set default theme to dark
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
+          <Navbar /> {/* This is the correct placement */}
           {children}
         </ThemeProvider>
       </body>

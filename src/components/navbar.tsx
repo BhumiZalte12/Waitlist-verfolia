@@ -6,18 +6,14 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
-// NOTE: The 'useAuth' import has been removed.
-
 const navigationLinks = [
   { href: "/", label: "Home" },
-  { href: "#features", label: "Features" },
-  { href: "#about", label: "About" },
+  { href: "/", label: "Features" },
+  { href: "/", label: "About" },
 ];
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // NOTE: All authentication state and logic have been removed.
 
   return (
     <>
@@ -47,7 +43,8 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-6 mx-auto">
               {navigationLinks.map((link) => (
                 <Link
-                  key={link.href}
+                  // FIX: Changed key from link.href to the unique link.label
+                  key={link.label}
                   href={link.href}
                   className="px-3 py-2 rounded-md text-muted-foreground hover:text-foreground transition-colors duration-200 text-sm font-medium"
                 >
@@ -59,16 +56,16 @@ export default function Navbar() {
             {/* Right Side Actions - Static */}
             <div className="hidden md:flex items-center space-x-2">
               <Link
-                href="/login"
+                href="/"
                 className="px-3 py-2 rounded-md text-muted-foreground hover:text-foreground transition-colors duration-200 text-sm font-medium"
               >
                 Sign in
               </Link>
               <Link
-                href="/login"
+                href="/"
                 className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-200 text-sm font-medium"
               >
-                Sign up for free
+                Sign up
               </Link>
             </div>
             
@@ -106,14 +103,23 @@ export default function Navbar() {
             
             <nav className="flex-1 flex flex-col justify-center items-center space-y-8">
               {navigationLinks.map((link) => (
-                <Link key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} className="block text-2xl font-semibold text-foreground">
+                <Link 
+                  // FIX: Changed key from link.href to the unique link.label
+                  key={link.label} 
+                  href={link.href} 
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className="block text-2xl font-semibold text-foreground"
+                >
                   {link.label}
                 </Link>
               ))}
             </nav>
             
             <div className="p-6">
-              <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="block w-full py-3 text-center bg-primary text-primary-foreground rounded-md text-lg font-semibold hover:bg-primary/90 transition-colors">
+              <Link 
+                href="/" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="block w-full py-3 text-center bg-primary text-primary-foreground rounded-md text-lg font-semibold hover:bg-primary/90 transition-colors">
                 Sign up
               </Link>
             </div>
