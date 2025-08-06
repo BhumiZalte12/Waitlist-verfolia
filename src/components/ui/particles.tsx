@@ -27,9 +27,9 @@ export function Particles({
 
     const properties = {
       particleColor: color,
-      particleRadius: 1.0,
+      particleRadius: 0.5,
       particleCount: quantity,
-      particleMaxVelocity: 0.2,
+      particleMaxVelocity: 0.1,
     };
 
     const resizeReset = () => {
